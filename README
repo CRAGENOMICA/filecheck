@@ -1,0 +1,11 @@
+You can open and compile this project with Netbeans IDE.
+
+You can also compile this project running:
+	$ make
+
+
+If you see an error like: `GLIBCXX_3.4.21' not found (required by ./main), It means that before you compile the source code you need to add the path of last version of your libstdc++.so.X.Y.Z in LD_LIBRARY_PATH. For example:
+
+    $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/bin/lib64/:/usr/local/lib64/
+
+
