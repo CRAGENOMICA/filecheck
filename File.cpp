@@ -120,16 +120,24 @@ std::string File::translateBases(const std::string & bases) {
   return ret;
 }
 
-void File::startCheck(const std::string & message) {
+bool File::startCheck(const std::string & message) {
+  bool ret = true;
+  
   std::cout << "Messages:" << std::endl;
   
-  file_size_ = File::getFileSize(this->file_name_);
+  if (openFile()) {
+    file_size_ = File::getFileSize(this->file_name_);
+
+    progress_.set_task(message);
+    progress_.set_total(file_size_);
+    progress_.Start(); 
+  }  
+  else {
+    std::cout << "File not found: " << this->file_name_ << std::endl;
+    ret = false;
+  }
   
-  progress_.set_task(message);
-  progress_.set_total(file_size_);
-  progress_.Start(); 
-  
-  openFile();
+  return ret;
 }
 
 void File::endCheck(void) {

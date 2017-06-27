@@ -41,7 +41,7 @@ public:
     virtual ~File();
 
 public:
-    void startCheck(const std::string & message);
+    bool startCheck(const std::string & message);
     void endCheck(void);
     
 public:

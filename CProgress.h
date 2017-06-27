@@ -8,7 +8,8 @@
  * File:   CProgress.h
  * Author: jjene
  *
- * Created on 24 de noviembre de 2016, 9:26
+ * History: 24/Nov/2016 Created.
+ *          27/Jun/2017 PERCENT_AND_STAR and PERCENT_AND_DOTS added
  */
 
 #ifndef CPROGRESS_H
@@ -21,7 +22,9 @@ enum tProgressType {
     PERCENT,
     BAR_PERCENT,   
     BAR_X,
-    STAR
+    STAR,
+    PERCENT_AND_STAR,
+    PERCENT_AND_DOTS
 };
 
 class CProgress {

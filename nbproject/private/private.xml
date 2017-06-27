@@ -5,4 +5,16 @@
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/main.cpp</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/CProgress.h</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/File.cpp</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/zutil.c</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/CProgress.cpp</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/Fasta.cpp</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/File.h</file>
+            <file>file:/home/jjene/NetBeansProjects/FileCheck/TFA.cpp</file>
+        </group>
+    </open-files>
 </project-private>

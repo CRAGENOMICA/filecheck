@@ -18,7 +18,7 @@
         <gdb_options>
           <DebugOptions>
             <option name="debug_command"
-                    value="&quot;${OUTPUT_PATH}&quot; /data/examples/nous/100Kchr10.tfa NT"/>
+                    value="&quot;${OUTPUT_PATH}&quot; /data/example_files/sara/new/chrom_14.imputed_without_low_R2.All_pigs.fa  &quot;NTGCA&quot;"/>
           </DebugOptions>
         </gdb_options>
         <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>

@@ -67,73 +67,73 @@ void Fasta::check(void) {
   
   std::cout << std::endl << "Checking Fasta File..." << std::endl << std::endl;
   
-  File::startCheck("\tChecking Fasta File");
+  if (File::startCheck("\tChecking Fasta File")) {
 
-  
-  long int seq_length = 0;
-  
-  std::string prev_different_bases = allowed_bases_;  
-  int seq_lines = 0;
-  bool read_char = true;
-  read_lines_ = 0;
-  int read_sequences = 0;
-  long int read_bytes = 0;
-  
-  first_seq_length_ = 0;
-  
-  bool eof = false;
-  char c;
-  while (!eof) {
-    
-    if (read_char) {
-      if ((c = getFileChar()) <= 0) {
-        eof = true;
+    long int seq_length = 0;
+
+    std::string prev_different_bases = allowed_bases_;  
+    int seq_lines = 0;
+    bool read_char = true;
+    read_lines_ = 0;
+    int read_sequences = 0;
+    long int read_bytes = 0;
+
+    first_seq_length_ = 0;
+
+    bool eof = false;
+    char c;
+    while (!eof) {
+
+      if (read_char) {
+        if ((c = getFileChar()) <= 0) {
+          eof = true;
+        } else {
+          read_bytes++;
+        }
       } else {
-        read_bytes++;
+        read_char = true;
       }
-    } else {
-      read_char = true;
-    }
-      
-    if (c == '#') {
-      eof = discardLine(read_bytes);
-      read_lines_++;
-    } else {
-      if (c == '>') {
+
+      if (c == '#') {
         eof = discardLine(read_bytes);
         read_lines_++;
-      }
-      else {
-        prev_different_bases = extra_bases_;
-        eof = getSequenceInfo(seq_length, seq_lines, read_bytes, c);
-        num_sequences_++;
-        read_lines_ += seq_lines;
-        read_char = false;
-        
-        if (read_sequences == 0) {
-          first_seq_length_ = seq_length;
+      } else {
+        if (c == '>') {
+          eof = discardLine(read_bytes);
+          read_lines_++;
         }
-        
-        
-        if (prev_different_bases != extra_bases_) {
-          std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". New not allowed base found. List of not allowed bases found until now: " << File::translateBases(extra_bases_) << std::endl << std::flush;
-          progress_.Show();
-        }
-          
-        if (seq_length != first_seq_length_) {
-          std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". It has " << seq_length << " bases. It differs of " << (first_seq_length_ - seq_length) << " bases from the first sequence." << std::endl;
-          progress_.Show();
-        }
+        else {
+          prev_different_bases = extra_bases_;
+          eof = getSequenceInfo(seq_length, seq_lines, read_bytes, c);
+          num_sequences_++;
+          read_lines_ += seq_lines;
+          read_char = false;
 
-        read_sequences++;
+          if (read_sequences == 0) {
+            first_seq_length_ = seq_length;
+          }
+
+
+          if (prev_different_bases != extra_bases_) {
+            std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". New not allowed base found. List of not allowed bases found until now: " << File::translateBases(extra_bases_) << std::endl << std::flush;
+            progress_.Show();
+          }
+
+          if (seq_length != first_seq_length_) {
+            std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". It has " << seq_length << " bases. It differs of " << (first_seq_length_ - seq_length) << " bases from the first sequence." << std::endl;
+            progress_.Show();
+          }
+
+          read_sequences++;
+        }
       }
+
+      progress_.MoveOn(read_bytes);
+      read_bytes = 0;
     }
-    
-    progress_.MoveOn(read_bytes);
-    read_bytes = 0;
+
+    File::endCheck();
   }
-  
-  File::endCheck();
 }
 
 

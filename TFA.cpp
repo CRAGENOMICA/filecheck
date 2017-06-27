@@ -66,62 +66,63 @@ void TFA::check(void) {
 
   std::cout << std::endl << "Checking TFA File..." << std::endl << std::endl;
   
-  File::startCheck("\tChecking TFA File");
-  
-  long int seq_length = 0;
-  
-  std::string prev_different_bases = allowed_bases_;
-  
-  read_lines_ = 0;
-  int read_sequences = 0;
-  long int read_bytes = 0;
-  
-  first_seq_length_ = 0;
-  
-  
-  bool eof = false;
-  char c;
-  while (!eof) {
-    
-    if ((c = getFileChar()) <= 0) {
-      eof = true;
-    } else {
-      read_bytes++;
-      
-      if (c == '#') {
-        eof = discardLine(read_bytes);
-        read_lines_++;
+  if (File::startCheck("\tChecking TFA File")) {
+
+    long int seq_length = 0;
+
+    std::string prev_different_bases = allowed_bases_;
+
+    read_lines_ = 0;
+    int read_sequences = 0;
+    long int read_bytes = 0;
+
+    first_seq_length_ = 0;
+
+
+    bool eof = false;
+    char c;
+    while (!eof) {
+
+      if ((c = getFileChar()) <= 0) {
+        eof = true;
       } else {
-        prev_different_bases = extra_bases_;
-        eof = getSequenceInfo(seq_length, read_bytes);
-        if (seq_length > 0) {
-          num_sequences_++;
-        }
-        read_lines_++;
+        read_bytes++;
 
-        if (read_sequences == 0) {
-          first_seq_length_ = seq_length;
-        }
-        
-        if (prev_different_bases != extra_bases_) {
-          std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". New not allowed base found. List of not allowed bases found until now: " << File::translateBases(extra_bases_) << std::endl << std::flush;
-          progress_.Show();
+        if (c == '#') {
+          eof = discardLine(read_bytes);
+          read_lines_++;
+        } else {
+          prev_different_bases = extra_bases_;
+          eof = getSequenceInfo(seq_length, read_bytes);
+          if (seq_length > 0) {
+            num_sequences_++;
+          }
+          read_lines_++;
+
+          if (read_sequences == 0) {
+            first_seq_length_ = seq_length;
+          }
+
+          if (prev_different_bases != extra_bases_) {
+            std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". New not allowed base found. List of not allowed bases found until now: " << File::translateBases(extra_bases_) << std::endl << std::flush;
+            progress_.Show();
+          }
+
+          if (seq_length != first_seq_length_) {
+            std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". It has " << seq_length << " bases. It differs of " << (first_seq_length_ - seq_length) << " bases from the first sequence." << std::endl << std::flush;
+            progress_.Show();
+          }
+
+          read_sequences++;
+
         }
 
-        if (seq_length != first_seq_length_) {
-          std::cout << "\r" << "\tError: Ln: " << read_lines_ << ". Seq: " << read_sequences << ". It has " << seq_length << " bases. It differs of " << (first_seq_length_ - seq_length) << " bases from the first sequence." << std::endl << std::flush;
-          progress_.Show();
-        }
-
-        read_sequences++;
-
+        progress_.MoveOn(read_bytes);
+        read_bytes = 0;
       }
-
-      progress_.MoveOn(read_bytes);
-      read_bytes = 0;
     }
+
+    File::endCheck();
   }
-  
-  File::endCheck();
 }
 

@@ -31,7 +31,7 @@ CProgress::CProgress() {
   set_current(0); 
   set_percent(0);
   set_task("");
-  set_type(tProgressType::PERCENT);
+  set_type(tProgressType::PERCENT_AND_DOTS);
   set_bar_length(30);
 }
 
@@ -91,6 +91,31 @@ void CProgress::Show(void) {
       if (star_pos == 2) { std::cout << "|"; }
       if (star_pos == 3) { std::cout << "/"; star_pos = -1;  }
 
+      std::cout << std::flush;
+      break;
+    case tProgressType::PERCENT_AND_STAR:
+      std::cout << std::setprecision(3)
+                << "\r"
+                << task()
+                << ": "
+                << percent()
+                << "%";
+      if (star_pos == 0) { std::cout << "-"; }
+      if (star_pos == 1) { std::cout << "\\"; }
+      if (star_pos == 2) { std::cout << "|"; }
+      if (star_pos == 3) { std::cout << "/"; star_pos = -1;  }
+      std::cout << std::flush;
+      break;
+    case tProgressType::PERCENT_AND_DOTS:
+      std::cout << std::setprecision(3)
+                << "\r"
+                << task()
+                << ": "
+                << percent()
+                << "%";
+      if (star_pos == 0) { std::cout << "..."; }
+      if (star_pos == 1) { std::cout << ".. "; }
+      if (star_pos == 2) { std::cout << ".  ";  star_pos = -1; }
       std::cout << std::flush;
       break;
     case tProgressType::BAR_PERCENT:
@@ -158,10 +183,16 @@ void CProgress::MoveOn(double increment) {
   if ((int)p>100) { p = 100; }
   set_percent((int)p);
   
-  if (previous_percent != percent()) {
+  // These types require extra showing
+  if ((type() == tProgressType::PERCENT_AND_DOTS) || (type() == tProgressType::STAR) || (type() == tProgressType::PERCENT_AND_STAR)) {
     Show();
   }
-
+  else {
+    if (previous_percent != percent()) {
+      Show();
+    }
+  }
+  
 #ifdef MOVE_SLOW
   std::this_thread::sleep_for (std::chrono::milliseconds(1));
 #endif  
